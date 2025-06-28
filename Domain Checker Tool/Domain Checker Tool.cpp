@@ -556,6 +556,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 SetWindowTextW(hEdit, output.c_str());
                 break;
             }
+            case ID_32772:
+                system("start https://github.com/YXC-Lhy/Domain-Checker-Tool");
+                break;
+            case ID_32773:
+                system("start https://space.bilibili.com/3493280161466993");
+                break;
             default:
                 return DefWindowProc(hWnd, message, wParam, lParam);
             }
@@ -587,6 +593,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             lf.lfWeight = FW_NORMAL; // 设置字体粗细
             // 创建字体
             HFONT hFont = CreateFontIndirect(&lf);
+
+            HDC hdc = GetDC(NULL); // 获取整个屏幕的设备上下文
+            int dpi = GetDeviceCaps(hdc, LOGPIXELSY);
+            // 定义字体属性
+            LOGFONT lf2;
+            ZeroMemory(&lf2, sizeof(LOGFONT));
+            lstrcpy(lf2.lfFaceName, L"Microsoft YaHei"); // 设置字体名称
+            lf2.lfHeight = -MulDiv(22, GetDeviceCaps(hdc, LOGPIXELSY), 72); // 设置字体大小（这里为12点）
+            lf2.lfWeight = FW_NORMAL; // 设置字体粗细
+            // 创建字体
+            HFONT bFont = CreateFontIndirect(&lf2);
 
             TCITEM tie;
             tie.mask = TCIF_TEXT;
@@ -906,17 +923,28 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             SendMessage(DNSoutput, WM_SETFONT, (WPARAM)hFont, MAKELPARAM(TRUE, 0));
             
             //第三页
-            HWND bilibili = CreateWindow(
-                L"BUTTON",  // 窗口类名
-                L"打开B站主页", // 按钮上的文本
-                WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, // 样式
-                200, 135, 100, 30, // 位置和大小 (x, y, width, height)
-                hWnd, // 父窗口
-                (HMENU)IDM_Bilibili, // 控件ID
+            HWND wenzi5 = CreateWindow(
+                L"STATIC",  // 窗口类名
+                L"域名检测工具",
+                WS_CHILD | WS_VISIBLE | SS_LEFT, // 样式
+                10, 55, 550, 350, // 位置和大小x,y,w,h
+                hWnd, // 父窗口句柄
+                (HMENU)EDIT_3,
                 ((LPCREATESTRUCT)lParam)->hInstance,
                 NULL
             );
-            SendMessage(bilibili, WM_SETFONT, (WPARAM)hFont, MAKELPARAM(TRUE, 0));
+            SendMessage(wenzi5, WM_SETFONT, (WPARAM)bFont, MAKELPARAM(TRUE, 0));
+            HWND wenzi4 = CreateWindow(
+                L"STATIC",  // 窗口类名
+                L"\n\nDomain Checker Tool\n\n本工具由Lhy制作，语言为C++，UI绘制为Win32，相关功能调用了Windows的ping.exe和nslookup\n\n代码已开源在github，相关网站链接见菜单栏的“关于”\n\n在菜单栏可调节重复ping的间隔设置，次数暂不可调\n\n一部分代码由AI完成，如截屏和文本处理",
+                WS_CHILD | WS_VISIBLE | SS_LEFT, // 样式
+                10, 55, 550, 350, // 位置和大小x,y,w,h
+                hWnd, // 父窗口句柄
+                (HMENU)EDIT_Page3,
+                ((LPCREATESTRUCT)lParam)->hInstance,
+                NULL
+            );
+            SendMessage(wenzi4, WM_SETFONT, (WPARAM)hFont, MAKELPARAM(TRUE, 0));
 
             // 初始状态下只显示第一个标签页的内容
             ShowHideControls(1, 1, hWnd);

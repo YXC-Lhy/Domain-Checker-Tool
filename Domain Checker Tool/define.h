@@ -36,3 +36,4 @@ HWND hWndMain = NULL;
 #define IDM_jiance 2003
 #define COMBOBOX_1 2004
 #define EDIT_DNSoutput 2005
+#define EDIT_3 3003
