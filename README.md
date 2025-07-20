@@ -4,7 +4,7 @@
 ## 功能：  
 1.ping一次或持续ping，统计结果和ping通率、平均延迟和每次的延迟等参数，可自定义ping的时间间隔（5s，10s，30s，1min，5min），一次最多支持重复ping 7,992,000次  
 2.DNS查询，支持A，AAAA，CNAME，MX，NS，PTR，SOA，TXT，SRV（调用nslookup）  
-3.端口检测，检测是否开放
+3.端口检测，检测是否开放  
 4.窗口截屏  
 5.导出ping统计  
 ## 截图：  
