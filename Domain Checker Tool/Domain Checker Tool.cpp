@@ -7,6 +7,7 @@
 #include "ping.h"
 #include "time.h"
 #include "DNS.h"
+#include "port.h"
 
 #include <cmath>
 #include <thread>
@@ -556,6 +557,28 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 SetWindowTextW(hEdit, output.c_str());
                 break;
             }
+            case IDM_jiance2:
+            {
+                HWND EDIT4 = GetDlgItem(hWnd, EDIT_4);
+                UpdateStaticText(EDIT4, L"检测结果：");
+                HWND Hip = GetDlgItem(hWnd, EDIT_slk4);
+                HWND Hport = GetDlgItem(hWnd, EDIT_slk5);
+                int iiii = TestTcpPort(Hip, Hport);
+                if (iiii == 3) {
+                    //MessageBox(nullptr, L"端口未开放，TCP连接超时", L"检测结果", MB_ICONINFORMATION | MB_OK);
+                    //SetWindowTextW(EDIT4, L"端口未开放，TCP连接超时");
+                    UpdateStaticText(EDIT4, L"检测结果：端口未开放，TCP连接超时");
+                }
+                else if(iiii == 1){
+                    //MessageBox(nullptr, L"端口已开放", L"检测结果", MB_ICONINFORMATION | MB_OK);
+                    UpdateStaticText(EDIT4, L"检测结果：端口已开放");
+                }
+                else {
+                    //MessageBox(nullptr, L"端口未开放，TCP无法连通", L"检测结果", MB_ICONINFORMATION | MB_OK);
+                    UpdateStaticText(EDIT4, L"检测结果：端口未开放，TCP无法连通");
+                }
+                break;
+            }
             case ID_32772:
                 system("start https://github.com/YXC-Lhy/Domain-Checker-Tool");
                 break;
@@ -583,7 +606,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             );
 
             // 设置标签大小
-            TabCtrl_SetItemSize(hTabControl, 195, 30);//w,h
+            TabCtrl_SetItemSize(hTabControl, 146, 30);//w,h
 
             // 定义字体属性
             LOGFONT lf;
@@ -607,12 +630,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
             TCITEM tie;
             tie.mask = TCIF_TEXT;
-            tie.pszText = (LPWSTR)L"Ping";
+            tie.pszText = (LPWSTR)L"Ping检测";
             TabCtrl_InsertItem(hTabControl, 0, &tie);
-            tie.pszText = (LPWSTR)L"DNS";
+            tie.pszText = (LPWSTR)L"DNS检测";
             TabCtrl_InsertItem(hTabControl, 1, &tie);
-            tie.pszText = (LPWSTR)L"关于";
+            tie.pszText = (LPWSTR)L"端口检测";
             TabCtrl_InsertItem(hTabControl, 2, &tie);
+            tie.pszText = (LPWSTR)L"关于信息";
+            TabCtrl_InsertItem(hTabControl, 3, &tie);
             SendMessage(hTabControl, WM_SETFONT, (WPARAM)hFont, MAKELPARAM(TRUE, 0));
 
             //第一页ping EDIT_Page1
@@ -923,6 +948,76 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             SendMessage(DNSoutput, WM_SETFONT, (WPARAM)hFont, MAKELPARAM(TRUE, 0));
             
             //第三页
+            HWND wenzi6 = CreateWindow(
+                L"STATIC",  // 窗口类名
+                L"域名/IP：                                                端口：", // 显示的文本内容
+                WS_CHILD | WS_VISIBLE | SS_LEFT, // 样式
+                10, 55, 500, 350, // 位置和大小x,y,w,h
+                hWnd, // 父窗口句柄
+                (HMENU)EDIT_Page3,
+                ((LPCREATESTRUCT)lParam)->hInstance,
+                NULL
+            );
+            SendMessage(wenzi6, WM_SETFONT, (WPARAM)hFont, MAKELPARAM(TRUE, 0));
+            HWND slk4 = CreateWindow(
+                L"EDIT",
+                L"www.bing.com",
+                WS_CHILD | WS_VISIBLE | WS_BORDER | ES_AUTOHSCROLL,
+                80, 55, 230, 30,
+                hWnd, // 父窗口句柄
+                (HMENU)EDIT_slk4,
+                ((LPCREATESTRUCT)lParam)->hInstance,
+                NULL
+            );
+            SendMessage(slk4, WM_SETFONT, (WPARAM)hFont, MAKELPARAM(TRUE, 0));
+            HWND slk5 = CreateWindow(
+                L"EDIT",
+                L"80",
+                WS_CHILD | WS_VISIBLE | WS_BORDER | ES_AUTOHSCROLL,
+                370, 55, 60, 30,
+                hWnd, // 父窗口句柄
+                (HMENU)EDIT_slk5,
+                ((LPCREATESTRUCT)lParam)->hInstance,
+                NULL
+            );
+            SendMessage(slk5, WM_SETFONT, (WPARAM)hFont, MAKELPARAM(TRUE, 0));
+            HWND button = CreateWindow(
+                L"BUTTON",  // 窗口类名
+                L"检测", // 按钮上的文本
+                WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, // 样式
+                510, 55, 60, 30, // 位置和大小
+                hWnd, // 父窗口
+                (HMENU)IDM_jiance2, // 控件ID
+                ((LPCREATESTRUCT)lParam)->hInstance,
+                NULL
+            );
+            SendMessage(button, WM_SETFONT, (WPARAM)hFont, MAKELPARAM(TRUE, 0));
+            HWND hCombo2 = CreateWindow(
+                WC_COMBOBOX,
+                L"",
+                CBS_DROPDOWNLIST | WS_CHILD | WS_VISIBLE,
+                440, 55, 60, 80,
+                hWnd,
+                (HMENU)COMBOBOX_2,
+                ((LPCREATESTRUCT)lParam)->hInstance,
+                NULL
+            );
+            SendMessage(hCombo2, WM_SETFONT, (WPARAM)hFont, MAKELPARAM(TRUE, 0));
+            SendMessage(hCombo2, CB_ADDSTRING, 0, (LPARAM)L"TCP");
+            SendMessage(hCombo2, CB_SETCURSEL, 0, 0);// 设置默认选中第一个选项
+            HWND wenzi7 = CreateWindow(
+                L"STATIC",  // 窗口类名
+                L"检测结果：", // 显示的文本内容
+                WS_CHILD | WS_VISIBLE | SS_LEFT, // 样式
+                10, 155, 500, 350, // 位置和大小x,y,w,h
+                hWnd, // 父窗口句柄
+                (HMENU)EDIT_4,
+                ((LPCREATESTRUCT)lParam)->hInstance,
+                NULL
+            );
+            SendMessage(wenzi7, WM_SETFONT, (WPARAM)hFont, MAKELPARAM(TRUE, 0));
+
+            //第四页
             HWND wenzi5 = CreateWindow(
                 L"STATIC",  // 窗口类名
                 L"域名检测工具",
@@ -936,11 +1031,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             SendMessage(wenzi5, WM_SETFONT, (WPARAM)bFont, MAKELPARAM(TRUE, 0));
             HWND wenzi4 = CreateWindow(
                 L"STATIC",  // 窗口类名
-                L"\n\nDomain Checker Tool\n\n本工具由Lhy制作，语言为C++，UI绘制为Win32，相关功能调用了Windows的ping.exe和nslookup\n\n代码已开源在github，相关网站链接见菜单栏的“关于”\n\n在菜单栏可调节重复ping的间隔设置，次数暂不可调\n\n一部分代码由AI完成，如截屏和文本处理",
+                L"\n\nDomain Checker Tool v1.1.0\n\n本工具由Lhy制作，语言为C++，UI绘制为Win32，相关功能调用了Windows的ping.exe和nslookup\n\n代码已开源在github，相关网站链接见菜单栏的“关于”\n\n在菜单栏可调节重复ping的间隔设置，次数暂不可调\n\n一部分代码由AI完成，如截屏和文本处理",
                 WS_CHILD | WS_VISIBLE | SS_LEFT, // 样式
                 10, 55, 550, 350, // 位置和大小x,y,w,h
                 hWnd, // 父窗口句柄
-                (HMENU)EDIT_Page3,
+                (HMENU)EDIT_Page4,
                 ((LPCREATESTRUCT)lParam)->hInstance,
                 NULL
             );
@@ -971,18 +1066,28 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             ShowHideControls(1, 1, hWnd);
             ShowHideControls(2, 0, hWnd);
             ShowHideControls(3, 0, hWnd);
+            ShowHideControls(4, 0, hWnd);
         }
         else if (selectedIndex == 1) {
             //ShowWindow(hStatic, SW_HIDE);
             ShowHideControls(1, 0, hWnd);
             ShowHideControls(2, 1, hWnd);
             ShowHideControls(3, 0, hWnd);
+            ShowHideControls(4, 0, hWnd);
+        }
+        else if (selectedIndex == 2) {
+            //ShowWindow(hStatic, SW_HIDE);
+            ShowHideControls(1, 0, hWnd);
+            ShowHideControls(2, 0, hWnd);
+            ShowHideControls(3, 1, hWnd);
+            ShowHideControls(4, 0, hWnd);
         }
         else {
             //ShowWindow(hStatic, SW_HIDE);
             ShowHideControls(1, 0, hWnd);
             ShowHideControls(2, 0, hWnd);
-            ShowHideControls(3, 1, hWnd);
+            ShowHideControls(3, 0, hWnd);
+            ShowHideControls(4, 1, hWnd);
         }
 
         break;

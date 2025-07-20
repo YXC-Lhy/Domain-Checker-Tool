@@ -42,6 +42,9 @@
     <ClInclude Include="DNS.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="port.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Domain Checker Tool.cpp">

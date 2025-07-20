@@ -3,14 +3,15 @@
 // 在全局范围内声明一个 HWND 变量
 HWND hWndMain = NULL;
 
-#define IDC_TAB_CONTROL 4001
-#define IDC_PAGE1_CONTAINER 4002
-#define IDC_PAGE2_CONTAINER 4003
-#define IDC_PAGE3_CONTAINER 4004
+#define IDC_TAB_CONTROL 9001
+#define IDC_PAGE1_CONTAINER 9002
+#define IDC_PAGE2_CONTAINER 9003
+#define IDC_PAGE3_CONTAINER 9004
 #define IDM_Bilibili 3002
 #define EDIT_Page1 1001//每页的文本
 #define EDIT_Page2 2001
 #define EDIT_Page3 3001
+#define EDIT_Page4 4001
 #define EDIT_slk1 1002
 #define IDM_ping 1003
 #define EDIT_IP 1004
@@ -36,4 +37,9 @@ HWND hWndMain = NULL;
 #define IDM_jiance 2003
 #define COMBOBOX_1 2004
 #define EDIT_DNSoutput 2005
-#define EDIT_3 3003
+#define EDIT_3 4003
+#define EDIT_slk4 3002
+#define IDM_jiance2 3003
+#define EDIT_slk5 3004
+#define COMBOBOX_2 3005
+#define EDIT_4 3006

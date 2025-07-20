@@ -146,6 +146,7 @@
     <ClInclude Include="Domain Checker Tool.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="ping.h" />
+    <ClInclude Include="port.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="others.h" />
     <ClInclude Include="targetver.h" />
